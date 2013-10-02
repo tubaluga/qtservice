@@ -1,0 +1,12 @@
+# - Config file for the ${PROJECT_NAME} package
+# It defines the following variables
+#  ${PROJECT_NAME}_INCLUDE_DIRS - include directory for ${PROJECT_NAME}
+#  ${PROJECT_NAME}_LIBRARIES    - all libraries to link against (warning, may be slower than just specify the used libs)
+
+# Tell the user project where to find our headers and libraries
+GET_FILENAME_COMPONENT(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+SET(@PROJECT_NAME@_INCLUDE_DIRS "@QT_INCLUDE_DIR@/@PROJECT_NAME@")
+SET(@PROJECT_NAME@_LIBRARIES "@PROJECT_NAME@")
+FIND_PACKAGE(Qt4 REQUIRED)
+INCLUDE("${SELF_DIR}/@PROJECT_NAME@-libraries.cmake")
