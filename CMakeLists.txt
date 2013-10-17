@@ -17,25 +17,19 @@ IF(NOT ${${PROJECT_NAME}_BUILD_SHARED})
   SET(${PROJECT_NAME}-libtype "STATIC")
 ELSE()
   SET(${PROJECT_NAME}-libtype "SHARED")
-  ADD_DEFINITIONS(-DQT_QTSERVICE_EXPORT)
 ENDIF()
 find_package(Qt4 COMPONENTS ${${PROJECT_NAME}-qt-components})
 include(${QT_USE_FILE})
 
 # generate moc files
-QT4_GENERATE_MOC(qtservice.cpp qtservice.moc)
-IF (WIN32)
-  QT4_GENERATE_MOC(qtservice_win.cpp qtservice_win.moc)
-ELSEIF(UNIX)
-  QT4_GENERATE_MOC(qtservice_unix.cpp qtservice_unix.moc)
-ENDIF()
+set(CMAKE_AUTOMOC TRUE)
 
-SET(${PROJECT_NAME}-sources qtservice.cpp qtservice.moc)
+SET(${PROJECT_NAME}-sources qtservice.cpp)
 
 IF (WIN32)
-  SET(${PROJECT_NAME}-sources ${${PROJECT_NAME}-sources} qtservice_win.cpp qtservice_win.moc)
+  SET(${PROJECT_NAME}-sources ${${PROJECT_NAME}-sources} qtservice_win.cpp)
 ELSEIF(UNIX)
-  SET(${PROJECT_NAME}-sources ${${PROJECT_NAME}-sources} qtservice_unix.cpp qtunixsocket.cpp qtunixserversocket.cpp qtservice_unix.moc)
+  SET(${PROJECT_NAME}-sources ${${PROJECT_NAME}-sources} qtservice_unix.cpp qtunixsocket.cpp qtunixserversocket.cpp)
 ENDIF()
 
 # for #include of generated moc files
