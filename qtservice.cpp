@@ -897,10 +897,14 @@ QtServiceBase *QtServiceBase::instance()
     This function is called in reply to controller requests. The
     default implementation does nothing.
 
+    If you return successfullyStopped = false,
+    you MUST call quit() yourself!!!!!!!!!!
+
     \sa start(), QtServiceController::stop()
 */
-void QtServiceBase::stop()
+void QtServiceBase::stop(bool& successfullyStopped)
 {
+  successfullyStopped = true;
 }
 
 /*!

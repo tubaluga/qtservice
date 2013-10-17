@@ -143,7 +143,7 @@ public:
 protected:
 
     virtual void start() = 0;
-    virtual void stop();
+    virtual void stop(bool& successfullyStopped);
     virtual void pause();
     virtual void resume();
     virtual void processCommand(int code);

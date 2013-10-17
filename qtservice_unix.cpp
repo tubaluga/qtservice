@@ -320,8 +320,12 @@ void QtServiceSysPrivate::slotReady()
         bool retValue = false;
 	if (cmd == QLatin1String("terminate")) {
             if (!(serviceFlags & QtServiceBase::CannotBeStopped)) {
-                QtServiceBase::instance()->stop();
-                QCoreApplication::instance()->quit();
+                bool serviceStopped = true;
+                QtServiceBase::instance()->stop(serviceStopped);
+                if (serviceStopped)
+                {
+                  QCoreApplication::instance()->quit();
+                }
                 retValue = true;
             }
         } else if (cmd == QLatin1String("pause")) {
