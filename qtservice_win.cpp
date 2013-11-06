@@ -573,11 +573,13 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
         QtServiceBase::instance()->start();
         break;
     case SERVICE_CONTROL_STOP:
-        bool serviceStopped = true;
-        QtServiceBase::instance()->stop(serviceStopped);
-        if (serviceStopped)
         {
-          QCoreApplication::instance()->quit();
+          bool serviceStopped = true;
+          QtServiceBase::instance()->stop(serviceStopped);
+          if (serviceStopped)
+          {
+            QCoreApplication::instance()->quit();
+          }
         }
         break;
     case SERVICE_CONTROL_PAUSE:
@@ -587,8 +589,8 @@ void QtServiceSysPrivate::handleCustomEvent(QEvent *e)
         QtServiceBase::instance()->resume();
         break;
     default:
-	if (code >= 128 && code <= 255)
-	    QtServiceBase::instance()->processCommand(code - 128);
+        if (code >= 128 && code <= 255)
+          QtServiceBase::instance()->processCommand(code - 128);
         break;
     }
 
