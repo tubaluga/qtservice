@@ -2,23 +2,34 @@ cmake_minimum_required(VERSION 2.8)
 PROJECT(qtservice)
 
 OPTION(${PROJECT_NAME}_BUILD_SHARED "Build ${PROJECT_NAME} as shared libraries" true)
+OPTION(USE_QT_5 "Use Qt5" NO)
 
 SET(${PROJECT_NAME}-qt-components QtCore)
 
 ADD_DEFINITIONS(-DUNICODE)
 
-SET(QT_DONT_USE_QTGUI TRUE)
-IF(NOT WIN32)
-  SET(QT_USE_QTNETWORK TRUE)
-  SET(${PROJECT_NAME}-qt-components ${${PROJECT_NAME}-qt-components} QtNetwork)
+IF(USE_QT_5)
+	FIND_PACKAGE(Qt5Core)
+
+	IF(NOT WIN32)
+		FIND_PACKAGE(Qt5Network)
+	ENDIF()
+ELSE()
+	SET(QT_DONT_USE_QTGUI TRUE)
+	IF(NOT WIN32)
+	  SET(QT_USE_QTNETWORK TRUE)
+	  SET(${PROJECT_NAME}-qt-components ${${PROJECT_NAME}-qt-components} QtNetwork)
+	ENDIF()
+
+	include(${QT_USE_FILE})
+
+	find_package(Qt4 COMPONENTS ${${PROJECT_NAME}-qt-components})
+
 ENDIF()
 
 IF(MSVC AND BUILD_SHARED_LIBS)
   ADD_DEFINITIONS("/DQT_QTSERVICE_EXPORT=__declspec(dllexport)")
 ENDIF()
-
-find_package(Qt4 COMPONENTS ${${PROJECT_NAME}-qt-components})
-include(${QT_USE_FILE})
 
 # generate moc files
 set(CMAKE_AUTOMOC TRUE)
@@ -38,7 +49,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 ADD_LIBRARY(${PROJECT_NAME} ${${PROJECT_NAME}-sources} ${${PROJECT_NAME}-mocs})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${QT_LIBRARIES})
+
+IF(NOT USE_QT_5)
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${QT_LIBRARIES})
+ELSE()
+	qt5_use_modules(${PROJECT_NAME} Core Network)
+ENDIF()
 
 INSTALL(TARGETS ${PROJECT_NAME}
     EXPORT flow-LibraryDependencies
