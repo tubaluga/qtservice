@@ -21,9 +21,9 @@ ELSE()
 	  SET(${PROJECT_NAME}-qt-components ${${PROJECT_NAME}-qt-components} QtNetwork)
 	ENDIF()
 
-	include(${QT_USE_FILE})
-
 	find_package(Qt4 COMPONENTS ${${PROJECT_NAME}-qt-components})
+
+	include(${QT_USE_FILE})
 
 ENDIF()
 
@@ -64,12 +64,14 @@ INSTALL(TARGETS ${PROJECT_NAME}
 		)
 
 INSTALL(FILES qtservice.h QtServiceBase QtServiceController DESTINATION ${QT_INCLUDE_DIR}/${PROJECT_NAME})
+
 IF(UNIX)
   INSTALL(FILES qtunixserversocket.h qtunixsocket.h DESTINATION ${QT_INCLUDE_DIR}/${PROJECT_NAME})
 ENDIF()
 
 CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/ProjectConfig.cmake.in
 	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake @ONLY )
+
 INSTALL(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
 	DESTINATION share/cmake/${PROJECT_NAME} COMPONENT Development )
 
